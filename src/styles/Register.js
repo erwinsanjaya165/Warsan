@@ -1,0 +1,105 @@
+import {StyleSheet} from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import {Warna_Putih, Warna_Utama} from '../utils';
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Warna_Putih,
+  },
+  header: {
+    marginTop: '30%',
+    backgroundColor: Warna_Putih,
+    marginHorizontal: 30,
+    justifyContent: 'center',
+  },
+  footer: {
+    flex: 2,
+    backgroundColor: Warna_Putih,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingHorizontal: 30,
+    paddingVertical: 30,
+  },
+  Name: {
+    fontSize: hp('3.5%'),
+    fontFamily: 'Montserrat-SemiBold',
+    color: Warna_Utama,
+  },
+  ViewContent1: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: Warna_Utama,
+    marginTop: '10%',
+    borderBottomRightRadius: 200,
+    left: 20,
+    alignItems: 'center',
+  },
+  ViewContent2: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: Warna_Utama,
+    marginTop: '3%',
+    borderBottomRightRadius: 200,
+    left: 20,
+    alignItems: 'center',
+  },
+  ViewContent3: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: Warna_Utama,
+    marginTop: '3%',
+    borderBottomRightRadius: 200,
+    left: 20,
+    alignItems: 'center',
+  },
+  ViewContent4: {
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomColor: Warna_Utama,
+    marginTop: '3%',
+    borderBottomRightRadius: 200,
+    left: 20,
+    alignItems: 'center',
+  },
+  inputText: {
+    width: wp('65%'),
+    color: Warna_Utama,
+    paddingHorizontal: 10,
+    left: 3,
+    fontSize: 14,
+  },
+  ButtonDown: {
+    alignItems: 'center',
+    marginTop: '67%',
+    backgroundColor: 'red',
+  },
+  ViewButton1: {
+    position: 'absolute',
+    bottom: 65,
+    width: wp('80%'),
+    height: hp('6.5%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Warna_Utama,
+    borderRadius: 7,
+  },
+  ViewButton2: {
+    position: 'absolute',
+    bottom: 0,
+    width: wp('80%'),
+    height: hp('6.5%'),
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Warna_Utama,
+    borderRadius: 7,
+  },
+  Button: {
+    fontSize: hp('2%'),
+    fontFamily: 'Montserrat-SemiBold',
+    color: Warna_Putih,
+  },
+});
