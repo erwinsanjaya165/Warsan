@@ -1,13 +1,57 @@
-import {Text, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import React, {Component} from 'react';
 import {IconMenu} from '../../assets/icons';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {Warna_Merah, Warna_Putih, Warna_Utama} from '../../utils';
+import {Warna_Merah, Warna_Putih, Warna_Utama, Warna_Hijau} from '../../utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class RwyatTraksi extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      token: '',
+      data: [],
+    };
+  }
+  componentDidMount() {
+    AsyncStorage.getItem('token')
+      .then(value => {
+        if (value != null) {
+          this.setState({token: value});
+        } else {
+          this.props.navigation.goBack();
+        }
+      })
+      .then(() => this.dataTransaksi())
+      .catch(err => {
+        console.log('token error', err);
+      });
+  }
+  dataTransaksi() {
+    fetch('https://aplikasi-santri.herokuapp.com/api/data_transaksi', {
+      method: 'GET',
+      redirect: 'follow',
+      headers: {
+        Authorization: `Bearer ${this.state.token}`,
+      },
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log('ini data', result);
+        this.setState({data: result.data});
+      })
+      .catch(error => console.log('error', error));
+  }
+
   render() {
     return (
       <View style={styles.page}>
@@ -21,24 +65,38 @@ export default class RwyatTraksi extends Component {
         </View>
         <View style={{alignItems: 'center'}}>
           {/* Daftar Riwayat */}
-          <View style={styles.container1}>
-            <View style={styles.boxId}>
-              <View>
-                <Text style={styles.textID}>ID 0010001001</Text>
-                <Text style={styles.textTanggal}>12/12/2012</Text>
-              </View>
-              <View style={styles.boxBlumByar2}>
-                <Text style={styles.textBlumByar}>Belum Bayar</Text>
-              </View>
-            </View>
-            <TouchableOpacity
-              style={styles.boxBottom}
-              onPress={() =>
-                this.props.navigation.navigate('DtailRwyatTraksi')
-              }>
-              <Text style={styles.textBottom}>Detail Transaksi</Text>
-            </TouchableOpacity>
-          </View>
+          <ScrollView>
+            {this.state.data.map((value, index) => {
+              return (
+                <View style={styles.container1} key={index}>
+                  <View style={styles.boxId}>
+                    <View>
+                      <Text style={styles.textID}>{value.id}</Text>
+                      <Text style={styles.textTanggal}>
+                        {value.created_at.substr(0, 10)}
+                      </Text>
+                    </View>
+                    {value.status === 'sudah dibayar' ? (
+                      <View style={styles.boxUdahByar}>
+                        <Text style={styles.textBlumByar}>{value.status}</Text>
+                      </View>
+                    ) : (
+                      <View style={styles.boxBlumByar2}>
+                        <Text style={styles.textBlumByar}>{value.status}</Text>
+                      </View>
+                    )}
+                  </View>
+                  <TouchableOpacity
+                    style={styles.boxBottom}
+                    onPress={() =>
+                      this.props.navigation.navigate('DtailRwyatTraksi')
+                    }>
+                    <Text style={styles.textBottom}>Detail Transaksi</Text>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
+          </ScrollView>
         </View>
       </View>
     );
@@ -103,6 +161,14 @@ const styles = StyleSheet.create({
     width: wp('27%'),
     height: hp('4%'),
     backgroundColor: Warna_Merah,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 5,
+  },
+  boxUdahByar: {
+    width: wp('27%'),
+    height: hp('4%'),
+    backgroundColor: Warna_Hijau,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 5,
