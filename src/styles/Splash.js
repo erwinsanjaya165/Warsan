@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {Warna_Utama, Warna_Putih} from '../utils';
+import {Warna_Utama} from '../utils';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -10,11 +10,18 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Warna_Utama,
+    backgroundColor: 'white',
   },
   text: {
-    fontSize: hp('5.5%'),
+    marginTop: '3%',
+    fontSize: hp('3%'),
     fontFamily: 'Montserrat-Bold',
-    color: Warna_Putih,
+    color: Warna_Utama,
+  },
+  boxLoading: {
+    width: '30%',
+    height: '30%',
+    position: 'absolute',
+    bottom: 10,
   },
 });

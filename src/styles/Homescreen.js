@@ -40,21 +40,8 @@ export const styles = StyleSheet.create({
     paddingLeft: 65,
     color: Warna_Utama,
   },
-  boxUbahKtalog: {
-    width: wp('28%'),
-    height: hp('3.7%'),
-    backgroundColor: Warna_Utama,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 5,
-  },
-  textUbahKtalog: {
-    fontSize: hp('1.7%'),
-    fontFamily: 'Montserrat-Bold',
-    color: Warna_Putih,
-  },
   containerBrang: {
-    padding: 20,
+    paddingHorizontal: 20,
   },
   boxBottom: {
     marginTop: '10%',
@@ -77,7 +64,7 @@ export const styles = StyleSheet.create({
     width: wp('90%'),
     height: hp('20%'),
     backgroundColor: Warna_Putih,
-    elevation: 7,
+    elevation: 5,
     borderRadius: 5,
     padding: 10,
   },

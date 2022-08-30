@@ -79,7 +79,7 @@ export const styles = StyleSheet.create({
   },
   ViewButton1: {
     position: 'absolute',
-    bottom: 65,
+    bottom: 60,
     width: wp('80%'),
     height: hp('6.5%'),
     alignItems: 'center',

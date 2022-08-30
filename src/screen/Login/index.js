@@ -19,12 +19,12 @@ export default class Login extends Component {
       email: '',
       password: '',
       loading: false,
+      roles: '',
       mata: true,
     };
   }
 
   login = () => {
-    this.setState({loading: true});
     if (this.state.email === '') {
       Alert.alert('Email !', 'Anda belum mengisi email');
     } else if (
@@ -37,48 +37,31 @@ export default class Login extends Component {
     } else if (this.state.password.length < 8) {
       Alert.alert('Password !', 'Passsword minimal 8 karakter');
     } else {
-      const {email, password} = this.state;
-      //POST json
-      var myHeaders = {email: email, password: password};
-      //making data to send on server
-      var formBody = [];
-      for (var key in myHeaders) {
-        var encodedKey = encodeURIComponent(key);
-        var encodedValue = encodeURIComponent(myHeaders[key]);
-        formBody.push(encodedKey + '=' + encodedValue);
-      }
-      formBody = formBody.join('&');
+      this.setState({loading: true});
+      let formdata = new FormData();
+      formdata.append('email', this.state.email);
+      formdata.append('password', this.state.password);
 
-      //POST request
       fetch('https://aplikasi-santri.herokuapp.com/api/login', {
-        method: 'POST', //Request Type
-        body: formBody, //post body
-        headers: {
-          //Header Defination
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        },
+        method: 'POST',
+        redirect: 'follow',
+        body: formdata,
       })
         .then(response => response.json())
-        //If response is in json then in success
-        .then(responseJson => {
-          console.log(responseJson.code);
-          if (responseJson.code === 200) {
-            AsyncStorage.setItem('token', responseJson.data.token);
-            Alert.alert('Welcome to Warsan', 'WARUNG SANTRI', [], {
-              cancelable: true,
-            });
+        .then(result => {
+          console.log(result);
+          AsyncStorage.setItem('token', result.data.token);
+          if (result.data.roles === 'customer') {
             this.props.navigation.replace('Homescreen');
           } else {
-            Alert.alert(
-              'Perhatian !',
-              'Akun anda belum terdaftar, silahkan mendaftar terlebih dahulu',
-            );
+            this.props.navigation.replace('Katalog');
           }
         })
-        //If response is not in json then in error
-        .catch(error => console.log(error));
+        .catch(error => console.log('error', error))
+        .finally(() => this.setState({loading: false}));
     }
   };
+
   render() {
     return (
       <View style={styles.container}>

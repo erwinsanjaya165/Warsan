@@ -15,37 +15,27 @@ const Home = ({navigation}) => {
 
   useEffect(() => {
     setLoading(true);
-    AsyncStorage.getItem('token')
-      .then(value => {
-        console.log(value);
-        if (value != null) {
-          var myHeaders = new Headers();
-          myHeaders.append('Authorization', `Bearer ${value}`);
-
-          var requestOptions = {
-            method: 'GET',
-            headers: myHeaders,
-            redirect: 'follow',
-          };
-
-          fetch(
-            'https://aplikasi-santri.herokuapp.com/api/home',
-            requestOptions,
-          )
-            .then(response => response.json())
-            .then(result => {
-              setData(result);
-              console.log(result);
-            })
-            .catch(error => console.log('error', error))
-            .finally(() => setLoading(false));
-        } else {
-          navigation.replace('Login');
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    AsyncStorage.getItem('token').then(value => {
+      console.log(value);
+      if (value != null) {
+        fetch('https://aplikasi-santri.herokuapp.com/api/home', {
+          method: 'GET',
+          redirect: 'follow',
+          headers: {
+            Authorization: `Bearer ${value}`,
+          },
+        })
+          .then(response => response.json())
+          .then(result => {
+            setData(result);
+            console.log(result);
+          })
+          .catch(error => console.log('error', error))
+          .finally(() => setLoading(false));
+      } else {
+        navigation.replace('Login');
+      }
+    });
 
     const unsubscribe = navigation.addListener('focus', () => {
       data();
@@ -55,23 +45,21 @@ const Home = ({navigation}) => {
 
   const checkout = () => {
     AsyncStorage.getItem('token').then(value => {
-      var myHeaders = new Headers();
-      myHeaders.append('Authorization', `Bearer ${value}`);
-
-      var requestOptions = {
+      fetch('https://aplikasi-santri.herokuapp.com/api/ke_checkout', {
         method: 'POST',
-        headers: myHeaders,
         redirect: 'follow',
-      };
-
-      fetch(
-        'https://aplikasi-santri.herokuapp.com/api/ke_checkout',
-        requestOptions,
-      )
+        headers: {
+          Authorization: `Bearer ${value}`,
+        },
+      })
         .then(response => response.json())
         .then(result => {
           console.log('ini adalah barang yang di checkout', result);
-          navigation.navigate('Checkout');
+          {
+            navigation.navigate('Checkout', {
+              result: result,
+            });
+          }
         })
         .catch(error => console.log('error', error));
     });
@@ -94,12 +82,7 @@ const Home = ({navigation}) => {
         </View>
         <View style={styles.boxKtlog}>
           <IconMenu />
-          <Text style={styles.textKtlog}>Katalog Saya</Text>
-          <TouchableOpacity
-            style={styles.boxUbahKtalog}
-            onPress={() => navigation.navigate('Katalog')}>
-            <Text style={styles.textUbahKtalog}>Ubah Katalog</Text>
-          </TouchableOpacity>
+          <Text style={styles.textKtlog}>Silahkan Pilih Barang</Text>
         </View>
         <View style={styles.loading}>
           <LottieView
@@ -132,19 +115,13 @@ const ProductItem = ({value, index}) => {
   const masukKeranjang = id => {
     setQty(qty + 1);
     AsyncStorage.getItem('token').then(token => {
-      var myHeaders = new Headers();
-      myHeaders.append('Authorization', `Bearer ${token}`);
-
-      var requestOptions = {
+      fetch(`https://aplikasi-santri.herokuapp.com/api/keranjang/${id}`, {
         method: 'POST',
-        headers: myHeaders,
         redirect: 'follow',
-      };
-
-      fetch(
-        `https://aplikasi-santri.herokuapp.com/api/keranjang/${id}`,
-        requestOptions,
-      )
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
         .then(response => response.json())
         .then(result => {
           console.log(result);
@@ -160,23 +137,17 @@ const ProductItem = ({value, index}) => {
       setQty(qty - 1);
     }
     AsyncStorage.getItem('token').then(token => {
-      var myHeaders = new Headers();
-      myHeaders.append('Authorization', `Bearer ${token}`);
-
-      var formdata = new FormData();
+      let formdata = new FormData();
       formdata.append('_method', 'put');
 
-      var requestOptions = {
+      fetch(`https://aplikasi-santri.herokuapp.com/api/kurangi_barang/${id}`, {
         method: 'POST',
-        headers: myHeaders,
         body: formdata,
         redirect: 'follow',
-      };
-
-      fetch(
-        `https://aplikasi-santri.herokuapp.com/api/kurangi_barang/${id}`,
-        requestOptions,
-      )
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
         .then(response => response.json())
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
@@ -186,23 +157,17 @@ const ProductItem = ({value, index}) => {
   const tambahBarang = id => {
     setQty(qty + 1);
     AsyncStorage.getItem('token').then(token => {
-      var myHeaders = new Headers();
-      myHeaders.append('Authorization', `Bearer ${token}`);
-
-      var formdata = new FormData();
+      let formdata = new FormData();
       formdata.append('_method', 'put');
 
-      var requestOptions = {
+      fetch(`https://aplikasi-santri.herokuapp.com/api/tambah_barang/${id}`, {
         method: 'POST',
-        headers: myHeaders,
         body: formdata,
         redirect: 'follow',
-      };
-
-      fetch(
-        `https://aplikasi-santri.herokuapp.com/api/tambah_barang/${id}`,
-        requestOptions,
-      )
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
         .then(response => response.json())
         .then(result => console.log(result))
         .catch(error => console.log('error', error));
@@ -221,7 +186,6 @@ const ProductItem = ({value, index}) => {
       </View>
       <View style={styles.boxTotal}>
         <Text style={styles.textTotal}>total : {value.harga_barang * qty}</Text>
-
         <View>
           {qty == 0 ? (
             <TouchableOpacity

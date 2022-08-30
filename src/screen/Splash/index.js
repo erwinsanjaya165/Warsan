@@ -1,8 +1,9 @@
-import {Text, View, ActivityIndicator} from 'react-native';
+import {Text, View, StatusBar} from 'react-native';
 import React, {Component} from 'react';
-import {Warna_Putih} from '../../utils';
 import {styles} from '../../styles/Splash';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {IconLogo} from '../../assets/icons';
+import LottieView from 'lottie-react-native';
 
 export default class Splash extends Component {
   componentDidMount() {
@@ -10,7 +11,23 @@ export default class Splash extends Component {
       console.log(value);
       setTimeout(() => {
         if (value != null) {
-          this.props.navigation.replace('Homescreen');
+          fetch('https://aplikasi-santri.herokuapp.com/api/user', {
+            method: 'GET',
+            redirect: 'follow',
+            headers: {
+              Authorization: `Bearer ${value}`,
+            },
+          })
+            .then(response => response.json())
+            .then(result => {
+              console.log(result);
+              if (result.roles === 'customer') {
+                this.props.navigation.replace('Homescreen');
+              } else {
+                this.props.navigation.replace('Katalog');
+              }
+            })
+            .catch(error => console.log('error', error));
         } else {
           this.props.navigation.replace('Login');
         }
@@ -21,8 +38,16 @@ export default class Splash extends Component {
   render() {
     return (
       <View style={styles.page}>
-        <Text style={styles.text}>Ws</Text>
-        <ActivityIndicator size={35} color={Warna_Putih} />
+        <StatusBar backgroundColor="white" />
+        <IconLogo />
+        <Text style={styles.text}>Warung Santri</Text>
+        <View style={styles.boxLoading}>
+          <LottieView
+            source={require('../../assets/lottie/loadingSplash.json')}
+            loop={true}
+            autoPlay={true}
+          />
+        </View>
       </View>
     );
   }

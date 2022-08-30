@@ -56,7 +56,7 @@ export const styles = StyleSheet.create({
     paddingLeft: 5,
   },
   textInput: {
-    marginTop: '6%',
+    marginTop: '3.5%',
     width: wp('90%'),
     height: hp('6%'),
     borderWidth: 1,

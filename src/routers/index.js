@@ -6,7 +6,6 @@ import {
   Register,
   Checkout,
   Katalog,
-  TmbahBrang,
   DtailRwyatTraksi,
   TarikDana,
   Iklan,

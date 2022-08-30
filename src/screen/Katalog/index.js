@@ -43,16 +43,13 @@ export default class Katalog extends Component {
 
   getData() {
     this.setState({loading: true});
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${this.state.token}`);
-
-    var requestOptions = {
+    fetch('https://aplikasi-santri.herokuapp.com/api/home', {
       method: 'GET',
-      headers: myHeaders,
       redirect: 'follow',
-    };
-
-    fetch('https://aplikasi-santri.herokuapp.com/api/home', requestOptions)
+      headers: {
+        Authorization: `Bearer ${this.state.token}`,
+      },
+    })
       .then(response => response.json())
       .then(result => {
         this.setState({data: result});
@@ -63,23 +60,17 @@ export default class Katalog extends Component {
   }
 
   hapus(id) {
-    var myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${this.state.token}`);
+    let formdata = new FormData();
 
-    var formdata = new FormData();
     formdata.append('_method', 'delete');
-
-    var requestOptions = {
+    fetch(`https://aplikasi-santri.herokuapp.com/api/delete_barang/${id}`, {
       method: 'DELETE',
-      headers: myHeaders,
-      body: formdata,
       redirect: 'follow',
-    };
-
-    fetch(
-      `https://aplikasi-santri.herokuapp.com/api/delete_barang/${id}`,
-      requestOptions,
-    )
+      body: formdata,
+      headers: {
+        Authorization: `Bearer ${this.state.token}`,
+      },
+    })
       .then(response => response.json())
       .then(result => {
         console.log(result);
@@ -101,6 +92,34 @@ export default class Katalog extends Component {
     ]);
   };
 
+  logout() {
+    fetch('https://aplikasi-santri.herokuapp.com/api/logout', {
+      method: 'POST',
+      redirect: 'follow',
+      headers: {
+        Authorization: `Bearer ${this.state.token}`,
+      },
+    })
+      .then(response => response.json())
+      .then(result => {
+        console.log(result);
+        AsyncStorage.removeItem('token');
+        this.props.navigation.replace('Login');
+      })
+      .catch(error => console.log('error', error));
+  }
+  warningLogout() {
+    Alert.alert('Warning !', 'apakah anda yakin ingin keluar', [
+      {
+        text: 'batal',
+      },
+      {
+        text: 'OK',
+        onPress: () => this.logout(),
+      },
+    ]);
+  }
+
   render() {
     return this.state.loading ? (
       <View style={{flex: 1}}>
@@ -114,12 +133,12 @@ export default class Katalog extends Component {
       <View style={styles.page}>
         <ScrollView>
           <View style={styles.boxheader}>
+            <Text style={styles.textJudul}>Ubah Katalog</Text>
             <TouchableOpacity
               style={styles.Icon}
-              onPress={() => this.props.navigation.replace('Homescreen')}>
-              <Icon name="arrow-left" size={25} color="white" />
+              onPress={() => this.warningLogout()}>
+              <Icon name="logout" size={25} color="white" />
             </TouchableOpacity>
-            <Text style={styles.textJudul}>Ubah Katalog</Text>
           </View>
           <View style={styles.boxKtlog}>
             <IconMenu />

@@ -240,16 +240,6 @@ const TambahBarang = ({navigation}) => {
           </View>
         </View>
       </RNModal>
-      {/* <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
-        }}>
-       
-      </Modal> */}
     </View>
   );
 };

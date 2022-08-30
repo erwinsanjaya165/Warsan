@@ -19,9 +19,10 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
   },
+
   Icon: {
     position: 'absolute',
-    left: 20,
+    right: 20,
   },
   textJudul: {
     fontSize: hp('2.3%'),
@@ -29,7 +30,7 @@ export const styles = StyleSheet.create({
     color: Warna_Putih,
   },
   boxKtlog: {
-    marginTop: '4%',
+    marginTop: '7%',
     flexDirection: 'row',
     paddingLeft: 20,
   },
@@ -40,11 +41,11 @@ export const styles = StyleSheet.create({
     color: Warna_Utama,
   },
   boxContainer: {
-    paddingBottom: '25%',
+    paddingBottom: '20%',
+    marginTop: '5%',
   },
   container: {
     paddingHorizontal: 20,
-    top: '3%',
   },
   boxProduct: {
     flexDirection: 'row',
